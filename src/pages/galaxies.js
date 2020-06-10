@@ -1,20 +1,18 @@
-import React from "react"
+import React from "react";
 
-import { Link } from "gatsby"
-import { Router } from "@reach/router"
-import Layout from "../components/layout"
+import { Link } from "gatsby";
+import { Router } from "@reach/router";
+import Layout from "../components/layout";
 
-const things = ["hello", "magic", "oogabooga", "other"]
+const things = ["hello", "magic", "oogabooga", "other"];
 
 const Menu = () => {
   return (
     <ol>
       <li>
-        <Link to={"/galaxies/"}>
-          Go to Home
-        </Link>
+        <Link to={"/galaxies/"}>Go to Home</Link>
       </li>
-      {things.map(thing => (
+      {things.map((thing) => (
         <li>
           <Link to={"/galaxies/" + thing} key={thing + "-link"}>
             Go to {thing}
@@ -22,8 +20,8 @@ const Menu = () => {
         </li>
       ))}
     </ol>
-  )
-}
+  );
+};
 
 const TestPage = ({ magic }) => {
   return (
@@ -31,19 +29,19 @@ const TestPage = ({ magic }) => {
       <h1>{magic}</h1>
       <p>testing</p>
     </div>
-  )
-}
+  );
+};
 
 const IndexPage = () => (
   <Layout>
     <Menu />
     <Router basepath="/galaxies">
-      {things.map(thing => (
+      {things.map((thing) => (
         <TestPage magic={thing} key={thing} path={thing} />
       ))}
       <TestPage magic="home!" path="/" />
     </Router>
   </Layout>
-)
+);
 
-export default IndexPage
+export default IndexPage;
