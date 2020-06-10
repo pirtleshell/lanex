@@ -1,0 +1,4 @@
+[submodule "laniakean-api-tests"]
+	path = laniakean-api-tests
+	url = https://github.com/pirtleshell/laniakean-api-tests.git
+	branch = new-api
