@@ -3,19 +3,32 @@ import React from "react";
 import { Link } from "gatsby";
 import { Router } from "@reach/router";
 import Layout from "../components/layout";
+import GalaxyDetail from '../components/GalaxyDetail';
 
-const things = ["hello", "magic", "oogabooga", "other"];
+// const things = [...Array(5).keys()].map(i => i+1);
+const NUM_GALAXIES = 5;
 
 const Menu = () => {
+  const [galaxyIds, setGalaxyIds] = React.useState([]);
+
+  React.useEffect(() => {
+    fetch(`https://laniakean.com/api/v1/galaxies/?brightest=${NUM_GALAXIES}`)
+      .then((res) => res.json())
+      .then((data) => {
+        console.log(data)
+        setGalaxyIds(data.pgcs);
+      });
+  }, []);
+
   return (
     <ol>
-      <li>
+      <li key="home">
         <Link to={"/galaxies/"}>Go to Home</Link>
       </li>
-      {things.map((thing) => (
-        <li>
-          <Link to={"/galaxies/" + thing} key={thing + "-link"}>
-            Go to {thing}
+      {galaxyIds.map((galaxyId) => (
+        <li key={galaxyId}>
+          <Link to={"/galaxies/" + galaxyId}>
+            Go to {galaxyId}
           </Link>
         </li>
       ))}
@@ -23,23 +36,11 @@ const Menu = () => {
   );
 };
 
-const TestPage = ({ magic }) => {
-  return (
-    <div>
-      <h1>{magic}</h1>
-      <p>testing</p>
-    </div>
-  );
-};
-
 const IndexPage = () => (
   <Layout>
     <Menu />
     <Router basepath="/galaxies">
-      {things.map((thing) => (
-        <TestPage magic={thing} key={thing} path={thing} />
-      ))}
-      <TestPage magic="home!" path="/" />
+      <GalaxyDetail path="/:galaxyId" />
     </Router>
   </Layout>
 );
