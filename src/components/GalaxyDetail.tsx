@@ -8,10 +8,6 @@ const GalaxyDetail: React.FC<Props> = ({ galaxyId }) => {
   const [galaxyData, setGalaxyData] = React.useState(null);
   const pgc = parseInt(String(galaxyId));
 
-  if (isNaN(pgc)) {
-    return <p>404. Galaxy id must be a number.</p>;
-  }
-
   React.useEffect(() => {
     fetch(`https://laniakean.com/api/v1/galaxies/?pgc=${pgc}`)
       .then((res) => res.json())
@@ -19,6 +15,10 @@ const GalaxyDetail: React.FC<Props> = ({ galaxyId }) => {
         setGalaxyData(data);
       });
   }, [pgc]);
+
+  if (isNaN(pgc)) {
+    return <p>404. Galaxy id must be a number.</p>;
+  }
 
   return (
     <div>

@@ -3,9 +3,8 @@ import React from "react";
 import { Link } from "gatsby";
 import { Router } from "@reach/router";
 import Layout from "../components/layout";
-import GalaxyDetail from '../components/GalaxyDetail';
+import GalaxyDetail from "../components/GalaxyDetail";
 
-// const things = [...Array(5).keys()].map(i => i+1);
 const NUM_GALAXIES = 5;
 
 const Menu = () => {
@@ -15,7 +14,7 @@ const Menu = () => {
     fetch(`https://laniakean.com/api/v1/galaxies/?brightest=${NUM_GALAXIES}`)
       .then((res) => res.json())
       .then((data) => {
-        console.log(data)
+        console.log(data);
         setGalaxyIds(data.pgcs);
       });
   }, []);
@@ -27,9 +26,7 @@ const Menu = () => {
       </li>
       {galaxyIds.map((galaxyId) => (
         <li key={galaxyId}>
-          <Link to={"/galaxies/" + galaxyId}>
-            Go to {galaxyId}
-          </Link>
+          <Link to={"/galaxies/" + galaxyId}>Go to {galaxyId}</Link>
         </li>
       ))}
     </ol>
