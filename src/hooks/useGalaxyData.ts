@@ -11,6 +11,7 @@ interface GalaxyApiQuery {
 
 export default (query: GalaxyApiQuery) => {
   const [loading, setLoading] = React.useState(true);
+  const [error, setError] = React.useState(null);
   const [data, setData] = React.useState({
     pgcs: [],
     galaxies: [],
@@ -30,12 +31,12 @@ export default (query: GalaxyApiQuery) => {
     fetch(`https://laniakean.com/api/v1/galaxies/${encodeQuery(q)}`)
       .then((res) => res.json())
       .then((galaxyData) => {
-        setData(galaxyData);
+        galaxyData.error ? setError(galaxyData.error) : setData(galaxyData);
         setLoading(false);
       });
   }, [pgc, brightest, closest, limit, offset]);
 
-  return { loading, data, pgcs, galaxies, galaxy };
+  return { loading, data, error, pgcs, galaxies, galaxy };
 };
 
 /**
