@@ -4,27 +4,19 @@ import { Link } from "gatsby";
 import { Router } from "@reach/router";
 import Layout from "../components/layout";
 import GalaxyDetail from "../components/GalaxyDetail";
+import useGalaxyData from "../hooks/useGalaxyData";
 
 const NUM_GALAXIES = 5;
 
 const Menu = () => {
-  const [galaxyIds, setGalaxyIds] = React.useState([]);
-
-  React.useEffect(() => {
-    fetch(`https://laniakean.com/api/v1/galaxies/?brightest=${NUM_GALAXIES}`)
-      .then((res) => res.json())
-      .then((data) => {
-        console.log(data);
-        setGalaxyIds(data.pgcs);
-      });
-  }, []);
+  const { pgcs } = useGalaxyData({ brightest: NUM_GALAXIES });
 
   return (
     <ol>
       <li key="home">
         <Link to={"/galaxies/"}>Go to Home</Link>
       </li>
-      {galaxyIds.map((galaxyId) => (
+      {pgcs.map((galaxyId) => (
         <li key={galaxyId}>
           <Link to={"/galaxies/" + galaxyId}>Go to {galaxyId}</Link>
         </li>
