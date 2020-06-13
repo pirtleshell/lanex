@@ -1,4 +1,5 @@
 import React from "react";
+import { GalaxyData } from "../types";
 import { InvalidQuery } from "../errors";
 
 interface GalaxyApiQuery {
@@ -12,7 +13,7 @@ interface GalaxyApiQuery {
 export default (query: GalaxyApiQuery) => {
   const [loading, setLoading] = React.useState(false);
   const [error, setError] = React.useState(null);
-  const [data, setData] = React.useState({
+  const [data, setData] = React.useState<GalaxyData>({
     pgcs: [],
     galaxies: [],
   });
@@ -31,7 +32,7 @@ export default (query: GalaxyApiQuery) => {
     const q = { pgc, brightest, closest, limit, offset };
     fetch(`https://laniakean.com/api/v1/galaxies/${encodeQuery(q)}`)
       .then((res) => res.json())
-      .then((galaxyData) => {
+      .then((galaxyData: GalaxyData) => {
         galaxyData.error ? setError(galaxyData.error) : setData(galaxyData);
         setLoading(false);
       });
