@@ -1,5 +1,5 @@
 import React from "react";
-import { GalaxyData } from "../types";
+import { Galaxy } from "../models/Galaxy";
 import { InvalidQuery } from "../errors";
 
 interface GalaxyApiQuery {
@@ -63,3 +63,9 @@ export const encodeQuery = (query: GalaxyApiQuery) => {
       .join("&")
   );
 };
+
+interface GalaxyData {
+  pgcs: number[];
+  galaxies: Galaxy[];
+  error?: string;
+}
