@@ -1,4 +1,6 @@
-export interface Galaxy {
+import { formatRA, formatDec } from "./units";
+
+export interface ApiGalaxy {
   pgc: number;
   dist: number;
   ra: string;
@@ -26,32 +28,62 @@ const catalogPriority = [
   { prop: "sdss", prefix: "SDSS " },
 ];
 
-export const getGalaxyName = (galaxy: Galaxy): string => {
-  if (galaxy.commonNames.length) {
-    return galaxy.commonNames[0];
+export class Galaxy {
+  data: ApiGalaxy;
+  constructor(galaxyData: ApiGalaxy) {
+    this.data = galaxyData;
   }
 
-  for (const { prop, prefix } of catalogPriority) {
-    if (galaxy.catalogs[prop]) {
-      return prefix + galaxy.catalogs[prop];
-    }
+  pgc() {
+    return this.data.pgc;
   }
 
-  return `PGC ${galaxy.pgc}`;
-};
-
-export const getGalaxyNames = (galaxy: Galaxy) => {
-  var names = [];
-  Object.keys(galaxy.catalogs).forEach((key) => {
-    if (key === "messier") {
-      var n = galaxy.catalogs[key];
-      names.unshift(`Messier ${n} (M${n})`);
-    } else if (key === "sdss") {
-      return;
-    } else {
-      names.push(`${key.toUpperCase()} ${galaxy.catalogs[key]}`);
+  name() {
+    if (this.data.commonNames.length) {
+      return this.data.commonNames[0];
     }
-  });
-  names.push("PGC " + galaxy.pgc);
-  return galaxy.commonNames.concat(names);
-};
+
+    for (const { prop, prefix } of catalogPriority) {
+      if (this.data.catalogs[prop]) {
+        return prefix + this.data.catalogs[prop];
+      }
+    }
+
+    return `PGC ${this.data.pgc}`;
+  }
+
+  names() {
+    var names = [];
+    Object.keys(this.data.catalogs).forEach((key) => {
+      if (key === "messier") {
+        var n = this.data.catalogs[key];
+        names.unshift(`Messier ${n} (M${n})`);
+      } else if (key === "sdss") {
+        return;
+      } else {
+        names.push(`${key.toUpperCase()} ${this.data.catalogs[key]}`);
+      }
+    });
+    names.push("PGC " + this.data.pgc);
+    return this.data.commonNames.concat(names);
+  }
+
+  ra() {
+    return formatRA(this.data.ra);
+  }
+
+  dec() {
+    return formatDec(this.data.dec);
+  }
+  dist() {
+    return this.data.dist;
+  }
+  vhel() {
+    return this.data.vhel;
+  }
+
+  magnitudes = {
+    B: () => this.data.B_mag,
+    Ks: () => this.data.Ks_mag,
+  };
+}

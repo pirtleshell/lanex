@@ -12,8 +12,6 @@ import {
   Typography,
 } from "@material-ui/core";
 import useGalaxyData from "../hooks/useGalaxyData";
-import { getGalaxyName, getGalaxyNames } from "../models/Galaxy";
-import { formatDec, formatRA } from "../models/units";
 
 interface Props {
   galaxyId: number;
@@ -34,12 +32,14 @@ const GalaxyDetail: React.FC<Props> = ({ galaxyId }) => {
       ) : galaxy ? (
         <Grid container>
           <Grid item md={12}>
-            <Typography variant="h2">{getGalaxyName(galaxy)}</Typography>
+            <Typography variant="h2">{galaxy.name()}</Typography>
           </Grid>
           <Grid item md={6}>
-            <Typography><strong>Names:</strong></Typography>
+            <Typography>
+              <strong>Names:</strong>
+            </Typography>
             <List>
-              {getGalaxyNames(galaxy).map((name) => (
+              {galaxy.names().map((name) => (
                 <ListItem key={name}>{name}</ListItem>
               ))}
             </List>
@@ -49,27 +49,27 @@ const GalaxyDetail: React.FC<Props> = ({ galaxyId }) => {
               <TableBody>
                 <TableRow>
                   <TableCell>Distance</TableCell>
-                  <TableCell>{galaxy.dist}Mpc</TableCell>
+                  <TableCell>{galaxy.dist()} Mpc</TableCell>
                 </TableRow>
                 <TableRow>
                   <TableCell>Right Ascension</TableCell>
-                  <TableCell>{formatRA(galaxy.ra)}</TableCell>
+                  <TableCell>{galaxy.ra()}</TableCell>
                 </TableRow>
                 <TableRow>
                   <TableCell>Declination</TableCell>
-                  <TableCell>{formatDec(galaxy.dec)}</TableCell>
+                  <TableCell>{galaxy.dec()}</TableCell>
                 </TableRow>
                 <TableRow>
                   <TableCell>B magnitude</TableCell>
-                  <TableCell>{galaxy.B_mag} mag.</TableCell>
+                  <TableCell>{galaxy.magnitudes.B()} mag.</TableCell>
                 </TableRow>
                 <TableRow>
                   <TableCell>2MASS Ks magnitude</TableCell>
-                  <TableCell>{galaxy.Ks_mag} mag.</TableCell>
+                  <TableCell>{galaxy.magnitudes.Ks()} mag.</TableCell>
                 </TableRow>
                 <TableRow>
                   <TableCell>Heliocentric Velocity</TableCell>
-                  <TableCell>{galaxy.vhel} km/s</TableCell>
+                  <TableCell>{galaxy.vhel()} km/s</TableCell>
                 </TableRow>
               </TableBody>
             </Table>

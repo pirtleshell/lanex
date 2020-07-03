@@ -1,10 +1,9 @@
 import React from "react";
-import { Link } from 'gatsby';
+import { Link } from "gatsby";
 import { Typography } from "@material-ui/core";
 import GalaxyTable from "./GalaxyTable";
 import useGalaxyData from "../hooks/useGalaxyData";
-import { Galaxy, getGalaxyName } from "../models/Galaxy";
-import { formatDec, formatRA } from "../models/units";
+import { Galaxy } from "../models/Galaxy";
 
 const GalaxiesPage: React.FC = () => {
   const { loading, galaxies } = useGalaxyData({ closest: 25 });
@@ -21,37 +20,37 @@ const GalaxiesPage: React.FC = () => {
 const columns = [
   {
     header: "PGC",
-    accessor: "pgc",
+    render: (galaxy: Galaxy): number => galaxy.pgc(),
   },
   {
     header: "Name",
     render: (galaxy: Galaxy): React.ReactNode => (
-      <Link to={`/galaxies/${galaxy.pgc}`}>{getGalaxyName(galaxy)}</Link>
+      <Link to={`/galaxies/${galaxy.pgc()}`}>{galaxy.name()}</Link>
     ),
   },
   {
     header: "Distance (<abbr title='Megaparsecs'>Mpc</abbr>)",
-    accessor: "dist",
+    render: (galaxy: Galaxy): number => galaxy.dist(),
   },
   {
     header: "<abbr title='Right Ascension'>R.A.</abbr>",
-    render: (galaxy: Galaxy): string => formatRA(galaxy.ra),
+    render: (galaxy: Galaxy): string => galaxy.ra(),
   },
   {
     header: "<abbr title='Declination'>Decl.</abbr>",
-    render: (galaxy: Galaxy): string => formatDec(galaxy.dec),
+    render: (galaxy: Galaxy): string => galaxy.dec(),
   },
   {
     header: "B (<abbr title='Magnitude'>mag.</abbr>)",
-    accessor: "B_mag",
+    render: (galaxy: Galaxy): number => galaxy.magnitudes.B(),
   },
   {
     header: "Ks (<abbr title='Magnitude'>mag.</abbr>)",
-    accessor: "Ks_mag",
+    render: (galaxy: Galaxy): number => galaxy.magnitudes.Ks(),
   },
   {
     header: "Vhel (km/s)",
-    accessor: "vhel",
+    render: (galaxy: Galaxy): number => galaxy.vhel(),
   },
 ];
 

@@ -1,6 +1,6 @@
 import React from "react";
 import useSWR from "swr";
-import { Galaxy } from "../models/Galaxy";
+import { ApiGalaxy, Galaxy } from "../models/Galaxy";
 import { InvalidQuery } from "../errors";
 
 interface GalaxyApiQuery {
@@ -20,17 +20,20 @@ export default (query: GalaxyApiQuery) => {
     revalidateOnFocus: false,
     revalidateOnReconnect: false,
   });
-  const error = React.useMemo(
-    () => (data?.error ?? fetchError ?? null),
-    [data, fetchError]
-  );
+  const error = React.useMemo(() => data?.error ?? fetchError ?? null, [
+    data,
+    fetchError,
+  ]);
 
   const loading = React.useMemo(() => data == null && error == null, [
     data,
     error,
   ]);
   const pgcs = React.useMemo(() => data?.pgcs, [data]);
-  const galaxies = React.useMemo(() => data?.galaxies || [], [data]);
+  const galaxies = React.useMemo(
+    () => data?.galaxies.map((gal) => new Galaxy(gal)) || [],
+    [data]
+  );
   const galaxy = React.useMemo(
     () => (galaxies.length > 0 ? galaxies[0] : null),
     [galaxies]
@@ -64,6 +67,6 @@ export const encodeQuery = (query: GalaxyApiQuery) => {
 
 interface GalaxyData {
   pgcs: number[];
-  galaxies: Galaxy[];
+  galaxies: ApiGalaxy[];
   error?: string;
 }
