@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "gatsby";
 import useGalaxyData from "../hooks/useGalaxyData";
 
 interface Props {
@@ -23,6 +24,7 @@ const GalaxyDetail: React.FC<Props> = ({ galaxyId }) => {
       ) : (
         <p>No galaxy with PGC {pgc} found in database.</p>
       )}
+      <Link to='/galaxies/'>Back to galaxies</Link>
     </div>
   );
 };

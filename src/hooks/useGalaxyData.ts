@@ -1,4 +1,5 @@
 import React from "react";
+import useSWR from "swr";
 import { Galaxy } from "../models/Galaxy";
 import { InvalidQuery } from "../errors";
 
@@ -10,33 +11,30 @@ interface GalaxyApiQuery {
   offset?: number;
 }
 
-export default (query: GalaxyApiQuery) => {
-  const [loading, setLoading] = React.useState(false);
-  const [error, setError] = React.useState(null);
-  const [data, setData] = React.useState<GalaxyData>({
-    pgcs: [],
-    galaxies: [],
-  });
+const fetcher = (url: string): Promise<GalaxyData> =>
+  fetch(url).then((res) => res.json());
 
-  const pgcs = React.useMemo(() => data.pgcs, [data]);
-  const galaxies = React.useMemo(() => data.galaxies, [data]);
+export default (query: GalaxyApiQuery) => {
+  const url = `https://laniakean.com/api/v1/galaxies/${encodeQuery(query)}`;
+  const { data, error: fetchError } = useSWR(url, fetcher, {
+    revalidateOnFocus: false,
+    revalidateOnReconnect: false,
+  });
+  const error = React.useMemo(
+    () => (data?.error ?? fetchError ?? null),
+    [data, fetchError]
+  );
+
+  const loading = React.useMemo(() => data == null && error == null, [
+    data,
+    error,
+  ]);
+  const pgcs = React.useMemo(() => data?.pgcs, [data]);
+  const galaxies = React.useMemo(() => data?.galaxies || [], [data]);
   const galaxy = React.useMemo(
     () => (galaxies.length > 0 ? galaxies[0] : null),
     [galaxies]
   );
-
-  const { pgc, brightest, closest, limit, offset } = query;
-
-  React.useEffect(() => {
-    setLoading(true);
-    const q = { pgc, brightest, closest, limit, offset };
-    fetch(`https://laniakean.com/api/v1/galaxies/${encodeQuery(q)}`)
-      .then((res) => res.json())
-      .then((galaxyData: GalaxyData) => {
-        galaxyData.error ? setError(galaxyData.error) : setData(galaxyData);
-        setLoading(false);
-      });
-  }, [pgc, brightest, closest, limit, offset]);
 
   return { loading, data, error, pgcs, galaxies, galaxy };
 };
