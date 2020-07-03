@@ -13,6 +13,7 @@ import {
 } from "@material-ui/core";
 import useGalaxyData from "../hooks/useGalaxyData";
 import { getGalaxyName, getGalaxyNames } from "../models/Galaxy";
+import { formatDec, formatRA } from "../models/units";
 
 interface Props {
   galaxyId: number;
@@ -52,11 +53,11 @@ const GalaxyDetail: React.FC<Props> = ({ galaxyId }) => {
                 </TableRow>
                 <TableRow>
                   <TableCell>Right Ascension</TableCell>
-                  <TableCell>{galaxy.ra}</TableCell>
+                  <TableCell>{formatRA(galaxy.ra)}</TableCell>
                 </TableRow>
                 <TableRow>
                   <TableCell>Declination</TableCell>
-                  <TableCell>{galaxy.dec}</TableCell>
+                  <TableCell>{formatDec(galaxy.dec)}</TableCell>
                 </TableRow>
                 <TableRow>
                   <TableCell>B magnitude</TableCell>

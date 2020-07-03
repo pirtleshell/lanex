@@ -4,6 +4,7 @@ import { Typography } from "@material-ui/core";
 import GalaxyTable from "./GalaxyTable";
 import useGalaxyData from "../hooks/useGalaxyData";
 import { Galaxy, getGalaxyName } from "../models/Galaxy";
+import { formatDec, formatRA } from "../models/units";
 
 const GalaxiesPage: React.FC = () => {
   const { loading, galaxies } = useGalaxyData({ closest: 25 });
@@ -34,11 +35,11 @@ const columns = [
   },
   {
     header: "<abbr title='Right Ascension'>R.A.</abbr>",
-    accessor: "ra",
+    render: (galaxy: Galaxy): string => formatRA(galaxy.ra),
   },
   {
     header: "<abbr title='Declination'>Decl.</abbr>",
-    accessor: "dec",
+    render: (galaxy: Galaxy): string => formatDec(galaxy.dec),
   },
   {
     header: "B (<abbr title='Magnitude'>mag.</abbr>)",
