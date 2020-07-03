@@ -24,7 +24,6 @@ const columns = [
   },
   {
     header: "Name",
-    // accessor: "name",
     render: (galaxy: Galaxy): React.ReactNode => (
       <Link to={`/galaxies/${galaxy.pgc}`}>{getGalaxyName(galaxy)}</Link>
     ),
